@@ -1,0 +1,18 @@
+# Curated default rules for lss
+# Format: Name::Regex
+# Lines starting with # are comments
+
+AWS Access Key::AKIA[0-9A-Z]{16}::aws,cloud::0.95
+AWS Secret Key::(?i)aws[_-]?secret[_-]?access[_-]?key[\s:=]*[A-Za-z0-9/+=]{40,}::aws,cloud,secret::0.9
+GCP Service Account Private Key::-----BEGIN PRIVATE KEY-----::gcp,cloud,secret::0.98
+Azure Storage Key::(?i)azure[_-]?storage[_-]?key[\s:=]*[A-Za-z0-9+/=]{40,}::azure,cloud,secret::0.9
+Slack Token::xox[baprs]-[0-9a-zA-Z-]+::slack,token::0.85
+Stripe Live Key::sk_live_[0-9a-zA-Z]{24,}::stripe,payment,secret::0.95
+Stripe Test Key::sk_test_[0-9a-zA-Z]{24,}::stripe,test,secret::0.6
+JWT Token::eyJ[0-9A-Za-z_-]+\.[0-9A-Za-z_-]+\.[0-9A-Za-z_-]+::jwt,token::0.8
+SSH Private Key Block::-----BEGIN (RSA|DSA|EC|OPENSSH|PRIVATE) KEY-----::ssh,secret::0.99
+Heroku API Key::[0-9a-f]{32}::heroku,token::0.7
+Twilio API Key::SK[0-9a-fA-F]{32}::twilio,token::0.8
+SendGrid API Key::SG\.[A-Za-z0-9_-]{20,}::sendgrid,token::0.8
+Generic API Key::(?i)api[_-]?key[\s:=]*[\w-]{20,}::generic,token::0.6
+Long Base64::[A-Za-z0-9+/]{40,}={0,2}::base64,maybe-secret::0.4
