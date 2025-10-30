@@ -1,0 +1,20 @@
+pkgbase = lss
+	pkgdesc = Local Secret Scanner
+	pkgver = 0.1.0
+	pkgrel = 1
+	url = https://github.com/chaitanyayeleti/lss
+	arch = x86_64
+	license = MIT
+	makedepends = cargo
+	makedepends = rust
+	makedepends = pkg-config
+	makedepends = libgit2
+	makedepends = openssl
+	makedepends = libssh2
+	depends = libgit2
+	depends = libssh2
+	depends = openssl
+	source = https://github.com/chaitanyayeleti/lss/archive/refs/tags/v0.1.0.tar.gz
+	sha256sums = SKIP
+
+pkgname = lss
