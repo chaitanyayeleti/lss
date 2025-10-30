@@ -1,4 +1,3 @@
-cat > README.md <<'EOF'
 # lss — Local Secret Scanner
 
 lss scans local file trees and local git repositories for likely secrets using a rule-driven approach (regex heuristics + entropy checks). It is designed to run locally and not transmit any scanned data off the host.
@@ -184,4 +183,3 @@ If you'd like to add rules, please follow the rule format and include tags and a
 ## License
 
 MIT (see LICENSE file)
-EOF
