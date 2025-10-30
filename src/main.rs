@@ -72,7 +72,46 @@ enum Command {
 
 #[derive(clap::Parser, Debug)]
 #[command(name = "lss")]
-struct Cli { #[command(subcommand)] command: Option<Command> }
+struct Cli {
+    /// Run a scan (shorthand so you can run `lss --scan --path .`)
+    #[arg(long)]
+    scan: bool,
+
+    /// Path to scan (when using `--scan` shorthand)
+    #[arg(long)]
+    path: Option<PathBuf>,
+
+    /// Output format (when using `--scan` shorthand)
+    #[arg(long)]
+    format: Option<String>,
+
+    /// Override entropy threshold (when using `--scan` shorthand)
+    #[arg(long)]
+    entropy_threshold: Option<f64>,
+
+    /// Additional ignore file (when using `--scan` shorthand)
+    #[arg(long)]
+    ignore_file: Option<PathBuf>,
+
+    /// Load extra regex rules from a file (when using `--scan` shorthand)
+    #[arg(long)]
+    rules_file: Option<PathBuf>,
+
+    /// Include only findings that have any of these comma-separated tags (when using `--scan` shorthand)
+    #[arg(long)]
+    include_tags: Option<String>,
+
+    /// Exclude findings that have any of these comma-separated tags (when using `--scan` shorthand)
+    #[arg(long)]
+    exclude_tags: Option<String>,
+
+    /// Minimum rule confidence (0.0-1.0) (when using `--scan` shorthand)
+    #[arg(long)]
+    min_confidence: Option<f64>,
+
+    #[command(subcommand)]
+    command: Option<Command>,
+}
 
 #[derive(Debug, serde::Serialize)]
 struct Finding {
@@ -233,7 +272,20 @@ fn scan_git_history(repo_path: &std::path::Path, patterns: &[rules::Rule], ignor
 
 fn main() -> Result<()> {
     let cli = Cli::parse();
-    let command = cli.command.unwrap_or(Command::Scan { path: PathBuf::from("."), format: "human".to_string(), entropy_threshold: None, ignore_file: None, rules_file: None, include_tags: None, exclude_tags: None, min_confidence: None });
+    let command = if cli.scan {
+        Command::Scan {
+            path: cli.path.unwrap_or(PathBuf::from(".")),
+            format: cli.format.unwrap_or_else(|| "human".to_string()),
+            entropy_threshold: cli.entropy_threshold,
+            ignore_file: cli.ignore_file,
+            rules_file: cli.rules_file,
+            include_tags: cli.include_tags,
+            exclude_tags: cli.exclude_tags,
+            min_confidence: cli.min_confidence,
+        }
+    } else {
+        cli.command.unwrap_or(Command::Scan { path: PathBuf::from("."), format: "human".to_string(), entropy_threshold: None, ignore_file: None, rules_file: None, include_tags: None, exclude_tags: None, min_confidence: None })
+    };
     let res: Result<()> = match command {
         Command::Rules { cmd } => {
             match cmd {
